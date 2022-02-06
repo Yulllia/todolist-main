@@ -15,12 +15,17 @@ export function validateTodoInput(todoInputWrapper) {
     getTodoInputItems(todoInputWrapper);
   // disableEnterClick(todoButton);
   console.log(todoInput.value);
-  if (todoInput.value.length >= 3) {
+  if (todoInput.value?.length >= 3) {
     todoButton.classList.remove("todo-button_disabled");
     todoHelper.classList.remove("todo-helper_visible");
   } else {
     todoButton.classList.add("todo-button_disabled");
-    todoHelper.classList.add("todo-helper_visible");
+    todoInput.addEventListener("keypress", function disableEnterClick(e) {
+      if (e.key === "Enter" && todoInput.value?.length < 3) {
+        e.preventDefault();
+        return false;
+      }
+    });
   }
 }
 
