@@ -26,6 +26,9 @@ export function validateTodoInput(todoInputWrapper) {
         return false;
       }
     });
+    todoInput.addEventListener("focus", function () {
+      todoHelper.classList.add("todo-helper_visible");
+    });
   }
 }
 
