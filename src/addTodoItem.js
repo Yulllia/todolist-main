@@ -1,5 +1,12 @@
 import { removeTodoFromSStorage } from "./sessionStorage";
 import { addDisabled } from "./index";
+import {
+  saveTodoToSStorageCompleted,
+  STATECOMPLETED,
+  removeCompletedTodoFromSStorage,
+  STATEUNCOMPLETED,
+  getTodosCompletedFromSStorage,
+} from "./stateSessionStorage";
 
 export const getTodoItem = (text) => {
   // Create Todo Item
@@ -19,6 +26,14 @@ export const getTodoItem = (text) => {
   checkButton.addEventListener("click", toggleCheckButton(todoItem));
   todoItem.appendChild(checkButton);
 
+  checkButton.addEventListener(
+    "click",
+    addTodoCompleted(todoText, STATECOMPLETED)
+  );
+  checkButton.addEventListener(
+    "click",
+    removeTodoCompleted(todoText, STATECOMPLETED)
+  );
   // Create and add Remove button
   const removeButton = document.createElement("button");
   removeButton.innerHTML = "<i class='fas fa-trash'></i>";
@@ -29,19 +44,42 @@ export const getTodoItem = (text) => {
   return todoItem;
 };
 
+export function addTodoCompleted(todoItem) {
+  return (e) => {
+    e.preventDefault();
+    if (
+      getTodosCompletedFromSStorage(STATECOMPLETED).includes(todoItem.innerHTML)
+    ) {
+      saveTodoToSStorageCompleted(todoItem.innerHTML, STATEUNCOMPLETED);
+      removeCompletedTodoFromSStorage(todoItem.innerHTML, STATECOMPLETED);
+    } else {
+      saveTodoToSStorageCompleted(todoItem.innerHTML, STATECOMPLETED);
+      removeCompletedTodoFromSStorage(todoItem.innerHTML, STATEUNCOMPLETED);
+    }
+  };
+}
+
+function removeTodoCompleted(todoItem) {
+  return (e) => {
+    e.preventDefault();
+    todoItem.addEventListener("transitionend", function () {
+      todoItem.remove();
+    });
+  };
+}
 function removeTodoItem(todoItem) {
   return (e) => {
     e.preventDefault();
     todoItem.classList.add("todo-item_fall");
     todoItem.addEventListener("transitionend", function () {
       removeTodoFromSStorage(todoItem);
+      removeTodoFromSStorage(todoItem, STATECOMPLETED);
+      removeTodoFromSStorage(todoItem, STATEUNCOMPLETED);
       todoItem.remove();
     });
-    console.log("jjj");
     addDisabled();
   };
 }
-
 function toggleCheckButton(todoItem) {
   return (e) => {
     e.preventDefault();
