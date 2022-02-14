@@ -26,6 +26,7 @@ todoButton.addEventListener("click", addTodo);
 todoButton.addEventListener("click", addTodo);
 todoButton.addEventListener("click", removeDisabled);
 todoSelect.addEventListener("change", filterTodos);
+//Add addevent listener for todoSelect
 todoSelect.addEventListener("change", addDisabled);
 
 function onDOMLoaded() {
@@ -65,6 +66,7 @@ function removeDisabled() {
     todoSelect.removeAttribute("disabled");
   }
 }
+//Add selector disabled
 export function addDisabled() {
   setTimeout(() => {
     {
@@ -74,6 +76,7 @@ export function addDisabled() {
     }
   }, 300);
 }
+
 function filterTodos(e) {
   const todoItems = todoList.childNodes;
   filterTodoItems(todoItems, e.target.value);
